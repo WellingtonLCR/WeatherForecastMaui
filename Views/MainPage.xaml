@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:WeatherForecastMaui.ViewModels"
+             x:Class="WeatherForecastMaui.Views.MainPage"
+             x:DataType="viewmodels:MainViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+
+            <Label 
+                Text="Previsão do Tempo"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Entry 
+                Placeholder="Digite o nome da cidade"
+                Text="{Binding City}"
+                HorizontalOptions="Fill"/>
+
+            <DatePicker 
+                Date="{Binding SelectedDate}"
+                Format="D"
+                HorizontalOptions="Fill"/>
+
+            <Button 
+                Text="Buscar Previsão"
+                Command="{Binding SearchWeatherCommand}"
+                HorizontalOptions="Fill"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"/>
+
+            <ActivityIndicator 
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                HorizontalOptions="Center"/>
+
+            <Label 
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                HorizontalOptions="Center"/>
+
+            <Grid IsVisible="{Binding CurrentForecast, Converter={StaticResource NotNullConverter}}"
+                  RowDefinitions="Auto,Auto,Auto,Auto"
+                  ColumnDefinitions="Auto,*"
+                  RowSpacing="10"
+                  ColumnSpacing="15">
+
+                <Label Grid.Row="0" Grid.Column="0" Text="Cidade:" FontAttributes="Bold"/>
+                <Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentForecast.City}"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Text="Data:" FontAttributes="Bold"/>
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding CurrentForecast.Date, StringFormat='{0:d}'}"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Text="Temperatura:" FontAttributes="Bold"/>
+                <Label Grid.Row="2" Grid.Column="1" Text="{Binding CurrentForecast.Temperature, StringFormat='{0:F1}°C'}"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Text="Descrição:" FontAttributes="Bold"/>
+                <Label Grid.Row="3" Grid.Column="1" Text="{Binding CurrentForecast.Description}"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
